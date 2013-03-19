@@ -1,5 +1,6 @@
-package hc2.group5.project;
+package hci2.group5.project;
 
+import hci2.group5.project.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
