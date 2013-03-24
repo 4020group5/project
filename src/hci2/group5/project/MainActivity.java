@@ -1,5 +1,6 @@
 package hci2.group5.project;
 
+import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +15,14 @@ public class MainActivity extends Activity {
 
         View mapFragment = findViewById(R.id.mapFragment);
 
+        View buttons = findViewById(R.id.navAndSearchButtons);
         Button navButton = (Button) findViewById(R.id.navButton);
         Button searchButton = (Button) findViewById(R.id.searchButton);
 
-        View sidePane = findViewById(R.id.sidePane);
+        View navPane = findViewById(R.id.navPane);
+        View searchPane = findViewById(R.id.searchPane);
 
-        View.OnClickListener listener = new ClickListenerForSidePaneOpenClose(navButton, searchButton, sidePane);
-		navButton.setOnClickListener(listener);
-		searchButton.setOnClickListener(listener);
+		navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
+		searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
     }
 }
