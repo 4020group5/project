@@ -6,7 +6,7 @@ import android.view.View;
 
 class SideButtonClickListener implements View.OnClickListener {
 
-	SidePaneOperation sidePaneOperation;
+	private SidePaneOperation sidePaneOperation;
 
 	private View anotherViewToAnimate;
 	private static Float anotherViewInitX = null;
