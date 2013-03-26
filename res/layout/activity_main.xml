@@ -28,13 +28,15 @@
             android:id="@+id/navButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_directions" />
+            android:src="@android:drawable/ic_menu_directions"
+            style="?android:attr/borderlessButtonStyle" />
 
         <ImageButton
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_search" />
+            android:src="@android:drawable/ic_menu_search"
+            style="?android:attr/borderlessButtonStyle" />
 
     </LinearLayout>
 
