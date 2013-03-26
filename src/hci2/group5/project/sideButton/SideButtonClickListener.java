@@ -9,7 +9,6 @@ class SideButtonClickListener implements View.OnClickListener {
 	private SidePaneOperation sidePaneOperation;
 
 	private View anotherViewToAnimate;
-	private static Float anotherViewInitX = null;
 
 	public SideButtonClickListener(View pane, View anotherView, SidePaneState openState) {
 		sidePaneOperation = new SidePaneOperation(pane, openState);
@@ -18,13 +17,6 @@ class SideButtonClickListener implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		lazyInitializeAnotherInitX(anotherViewToAnimate);
-		sidePaneOperation.animateWithAnotherView(anotherViewToAnimate, anotherViewInitX);
-	}
-
-	private void lazyInitializeAnotherInitX(View anotherView) {
-		if (anotherViewInitX == null) {
-			anotherViewInitX = anotherView.getX();
-		}
+		sidePaneOperation.animateWithAnotherView(anotherViewToAnimate);
 	}
 }
