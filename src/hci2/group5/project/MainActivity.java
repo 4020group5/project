@@ -4,7 +4,7 @@ import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends Activity {
 
@@ -16,8 +16,8 @@ public class MainActivity extends Activity {
         View mapFragment = findViewById(R.id.mapFragment);
 
         View buttons = findViewById(R.id.navAndSearchButtons);
-        Button navButton = (Button) findViewById(R.id.navButton);
-        Button searchButton = (Button) findViewById(R.id.searchButton);
+        ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
+        ImageButton searchButton = (ImageButton) findViewById(R.id.searchButton);
 
         View navPane = findViewById(R.id.navPane);
         View searchPane = findViewById(R.id.searchPane);
