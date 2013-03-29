@@ -10,5 +10,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/project/libs/greenDAO-V1.3.1/greendao-1.3.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="libs/opencsv.2.3/opencsv-2.3.jar" sourcepath="libs/opencsv.2.3/opencsv-2.3-sources.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
