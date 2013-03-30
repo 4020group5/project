@@ -13,6 +13,7 @@ public class Building {
     private Long id;
     /** Not-null value. */
     private String name;
+    private long locationId;
     /** Not-null value. */
     private String builtBy;
     private int builtYear;
@@ -24,6 +25,9 @@ public class Building {
     /** Used for active entity operations. */
     private transient BuildingDao myDao;
 
+    private Location location;
+    private Long location__resolvedKey;
+
     private List<Department> departments;
 
     public Building() {
@@ -33,9 +37,10 @@ public class Building {
         this.id = id;
     }
 
-    public Building(Long id, String name, String builtBy, int builtYear, String supplementaryInfo) {
+    public Building(Long id, String name, long locationId, String builtBy, int builtYear, String supplementaryInfo) {
         this.id = id;
         this.name = name;
+        this.locationId = locationId;
         this.builtBy = builtBy;
         this.builtYear = builtYear;
         this.supplementaryInfo = supplementaryInfo;
@@ -65,6 +70,14 @@ public class Building {
         this.name = name;
     }
 
+    public long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(long locationId) {
+        this.locationId = locationId;
+    }
+
     /** Not-null value. */
     public String getBuiltBy() {
         return builtBy;
@@ -89,6 +102,34 @@ public class Building {
 
     public void setSupplementaryInfo(String supplementaryInfo) {
         this.supplementaryInfo = supplementaryInfo;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public Location getLocation() {
+        long __key = this.locationId;
+        if (location__resolvedKey == null || !location__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            LocationDao targetDao = daoSession.getLocationDao();
+            Location locationNew = targetDao.load(__key);
+            synchronized (this) {
+                location = locationNew;
+            	location__resolvedKey = __key;
+            }
+        }
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        if (location == null) {
+            throw new DaoException("To-one property 'locationId' has not-null constraint; cannot set to-one to null");
+        }
+        synchronized (this) {
+            this.location = location;
+            locationId = location.getId();
+            location__resolvedKey = locationId;
+        }
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

@@ -1,11 +1,14 @@
 package hci2.group5.project.dao;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import hci2.group5.project.dao.Building;
@@ -25,9 +28,10 @@ public class BuildingDao extends AbstractDao<Building, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property BuiltBy = new Property(2, String.class, "builtBy", false, "BUILT_BY");
-        public final static Property BuiltYear = new Property(3, int.class, "builtYear", false, "BUILT_YEAR");
-        public final static Property SupplementaryInfo = new Property(4, String.class, "supplementaryInfo", false, "SUPPLEMENTARY_INFO");
+        public final static Property LocationId = new Property(2, long.class, "locationId", false, "LOCATION_ID");
+        public final static Property BuiltBy = new Property(3, String.class, "builtBy", false, "BUILT_BY");
+        public final static Property BuiltYear = new Property(4, int.class, "builtYear", false, "BUILT_YEAR");
+        public final static Property SupplementaryInfo = new Property(5, String.class, "supplementaryInfo", false, "SUPPLEMENTARY_INFO");
     };
 
     private DaoSession daoSession;
@@ -48,9 +52,10 @@ public class BuildingDao extends AbstractDao<Building, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'BUILDING' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'NAME' TEXT NOT NULL ," + // 1: name
-                "'BUILT_BY' TEXT NOT NULL ," + // 2: builtBy
-                "'BUILT_YEAR' INTEGER NOT NULL ," + // 3: builtYear
-                "'SUPPLEMENTARY_INFO' TEXT);"); // 4: supplementaryInfo
+                "'LOCATION_ID' INTEGER NOT NULL ," + // 2: locationId
+                "'BUILT_BY' TEXT NOT NULL ," + // 3: builtBy
+                "'BUILT_YEAR' INTEGER NOT NULL ," + // 4: builtYear
+                "'SUPPLEMENTARY_INFO' TEXT);"); // 5: supplementaryInfo
     }
 
     /** Drops the underlying database table. */
@@ -69,12 +74,13 @@ public class BuildingDao extends AbstractDao<Building, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getName());
-        stmt.bindString(3, entity.getBuiltBy());
-        stmt.bindLong(4, entity.getBuiltYear());
+        stmt.bindLong(3, entity.getLocationId());
+        stmt.bindString(4, entity.getBuiltBy());
+        stmt.bindLong(5, entity.getBuiltYear());
  
         String supplementaryInfo = entity.getSupplementaryInfo();
         if (supplementaryInfo != null) {
-            stmt.bindString(5, supplementaryInfo);
+            stmt.bindString(6, supplementaryInfo);
         }
     }
 
@@ -96,9 +102,10 @@ public class BuildingDao extends AbstractDao<Building, Long> {
         Building entity = new Building( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // name
-            cursor.getString(offset + 2), // builtBy
-            cursor.getInt(offset + 3), // builtYear
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // supplementaryInfo
+            cursor.getLong(offset + 2), // locationId
+            cursor.getString(offset + 3), // builtBy
+            cursor.getInt(offset + 4), // builtYear
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // supplementaryInfo
         );
         return entity;
     }
@@ -108,9 +115,10 @@ public class BuildingDao extends AbstractDao<Building, Long> {
     public void readEntity(Cursor cursor, Building entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.getString(offset + 1));
-        entity.setBuiltBy(cursor.getString(offset + 2));
-        entity.setBuiltYear(cursor.getInt(offset + 3));
-        entity.setSupplementaryInfo(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setLocationId(cursor.getLong(offset + 2));
+        entity.setBuiltBy(cursor.getString(offset + 3));
+        entity.setBuiltYear(cursor.getInt(offset + 4));
+        entity.setSupplementaryInfo(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     /** @inheritdoc */
@@ -136,4 +144,97 @@ public class BuildingDao extends AbstractDao<Building, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getLocationDao().getAllColumns());
+            builder.append(" FROM BUILDING T");
+            builder.append(" LEFT JOIN LOCATION T0 ON T.'LOCATION_ID'=T0.'_id'");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected Building loadCurrentDeep(Cursor cursor, boolean lock) {
+        Building entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        Location location = loadCurrentOther(daoSession.getLocationDao(), cursor, offset);
+         if(location != null) {
+            entity.setLocation(location);
+        }
+
+        return entity;    
+    }
+
+    public Building loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Building> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Building> list = new ArrayList<Building>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Building> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Building> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

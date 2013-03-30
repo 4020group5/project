@@ -9,9 +9,11 @@ import de.greenrobot.dao.AbstractDaoSession;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
+import hci2.group5.project.dao.Location;
 import hci2.group5.project.dao.Building;
 import hci2.group5.project.dao.Department;
 
+import hci2.group5.project.dao.LocationDao;
 import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DepartmentDao;
 
@@ -24,9 +26,11 @@ import hci2.group5.project.dao.DepartmentDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig locationDaoConfig;
     private final DaoConfig buildingDaoConfig;
     private final DaoConfig departmentDaoConfig;
 
+    private final LocationDao locationDao;
     private final BuildingDao buildingDao;
     private final DepartmentDao departmentDao;
 
@@ -34,22 +38,32 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
+        locationDaoConfig = daoConfigMap.get(LocationDao.class).clone();
+        locationDaoConfig.initIdentityScope(type);
+
         buildingDaoConfig = daoConfigMap.get(BuildingDao.class).clone();
         buildingDaoConfig.initIdentityScope(type);
 
         departmentDaoConfig = daoConfigMap.get(DepartmentDao.class).clone();
         departmentDaoConfig.initIdentityScope(type);
 
+        locationDao = new LocationDao(locationDaoConfig, this);
         buildingDao = new BuildingDao(buildingDaoConfig, this);
         departmentDao = new DepartmentDao(departmentDaoConfig, this);
 
+        registerDao(Location.class, locationDao);
         registerDao(Building.class, buildingDao);
         registerDao(Department.class, departmentDao);
     }
     
     public void clear() {
+        locationDaoConfig.getIdentityScope().clear();
         buildingDaoConfig.getIdentityScope().clear();
         departmentDaoConfig.getIdentityScope().clear();
+    }
+
+    public LocationDao getLocationDao() {
+        return locationDao;
     }
 
     public BuildingDao getBuildingDao() {

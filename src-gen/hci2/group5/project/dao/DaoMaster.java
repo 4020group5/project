@@ -8,6 +8,7 @@ import android.util.Log;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
+import hci2.group5.project.dao.LocationDao;
 import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DepartmentDao;
 
@@ -20,12 +21,14 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
+        LocationDao.createTable(db, ifNotExists);
         BuildingDao.createTable(db, ifNotExists);
         DepartmentDao.createTable(db, ifNotExists);
     }
     
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
+        LocationDao.dropTable(db, ifExists);
         BuildingDao.dropTable(db, ifExists);
         DepartmentDao.dropTable(db, ifExists);
     }
@@ -59,6 +62,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(LocationDao.class);
         registerDaoClass(BuildingDao.class);
         registerDaoClass(DepartmentDao.class);
     }
