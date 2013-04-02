@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
 
     private GoogleMap _googleMap;
 
-	@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -28,21 +28,21 @@ public class MainActivity extends Activity {
         View navPane = findViewById(R.id.navPane);
         View searchPane = findViewById(R.id.searchPane);
 
-		navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
-		searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
+        navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
+        searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
     }
 
-	private void setUpGoogleMap() {
-		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+    private void setUpGoogleMap() {
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
         _googleMap = mapFragment.getMap();
         setUpGoogleMapMyLocation(mapFragment);
-	}
+    }
 
-	private void setUpGoogleMapMyLocation(MapFragment mapFragment) {
-		// make the button show up
-		_googleMap.setMyLocationEnabled(true);
+    private void setUpGoogleMapMyLocation(MapFragment mapFragment) {
+        // make the button show up
+        _googleMap.setMyLocationEnabled(true);
         _googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         // move the button to bottom left
         MapViewUtil.putMyLocationButtonBottomLeft(mapFragment);
-	}
+    }
 }
