@@ -1,19 +1,11 @@
 package hci2.group5.project;
 
-import hci2.group5.project.dao.Building;
-import hci2.group5.project.dao.DaoMaster;
-import hci2.group5.project.dao.DaoSession;
-import hci2.group5.project.db.DatabaseOpenHelper;
 import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
 import hci2.group5.project.util.MapViewUtil;
-
-import java.util.List;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -38,11 +30,6 @@ public class MainActivity extends Activity {
 
 		navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
 		searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
-
-		DaoMaster daoMaster = new DaoMaster(new DatabaseOpenHelper(this).getReadableDatabase());
-		DaoSession daoSession = daoMaster.newSession();
-		List<Building> buildings = daoSession.getBuildingDao().queryBuilder().list();
-		Toast.makeText(this, buildings.get(0).getLocation().getLatitude() + "", Toast.LENGTH_LONG).show();
     }
 
 	private void setUpGoogleMap() {
