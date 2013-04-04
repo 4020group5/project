@@ -20,8 +20,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         setUpGoogleMap();
+        initializeNavAndSearchButtonsAndPanes();
+    }
 
-        View buttons = findViewById(R.id.navAndSearchButtons);
+	private void initializeNavAndSearchButtonsAndPanes() {
+		View buttons = findViewById(R.id.navAndSearchButtons);
         ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
         ImageButton searchButton = (ImageButton) findViewById(R.id.searchButton);
 
@@ -30,7 +33,7 @@ public class MainActivity extends Activity {
 
         navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
         searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
-    }
+	}
 
     private void setUpGoogleMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
