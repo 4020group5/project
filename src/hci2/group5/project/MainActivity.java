@@ -1,10 +1,14 @@
 package hci2.group5.project;
 
+import hci2.group5.project.dao.Department;
+import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
 import hci2.group5.project.util.MapViewUtil;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -21,7 +25,18 @@ public class MainActivity extends Activity {
 
         setUpGoogleMap();
         initializeNavAndSearchButtonsAndPanes();
+        setUpSearchPane();
     }
+
+	private void setUpSearchPane() {
+		setUpSearchPaneForDepartmentsRelated();
+	}
+
+	private void setUpSearchPaneForDepartmentsRelated() {
+		ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(this, android.R.layout.simple_list_item_1, DatabaseService.getAllDepartments(this));
+		AutoCompleteTextView autoCompleteDepartments = (AutoCompleteTextView) findViewById(R.id.autoCompleteDepartments);
+		autoCompleteDepartments.setAdapter(adapter);
+	}
 
 	private void initializeNavAndSearchButtonsAndPanes() {
 		View buttons = findViewById(R.id.navAndSearchButtons);
