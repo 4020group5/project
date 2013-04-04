@@ -1,18 +1,18 @@
 name,buildingId
 Faculty of Science - Computer Science,2
-Apricultureal and Food Sciences,3
+Agricultural and Food Sciences,3
 School of Agriculture,4
 Architecture,5
 Faculty of Architecture - City Planning,6
 Faculty of Architecture - Interior Design,7
-Faculty of Architecture - Lanscape Architecture,8
+Faculty of Architecture - Landscape Architecture,8
 Faculty of Architecture - Ph.D. in Planning and Design,9
 School of Art,10
 Faculty of Arts - Anthropology,11
 Faculty of Arts - Classics,12
-Faculty of Arts - Econnomics,13
-"Faculty of Arts - English, Film, * Theatre",14
-"Faculty of Arts - French, Spanish & Ltalian",15
+Faculty of Arts - Economics,13
+"Faculty of Arts - English, Film, & Theatre",14
+"Faculty of Arts - French, Spanish & Italian",15
 Faculty of Arts - German & Slavic Studies,16
 Faculty of Arts -  History,17
 Faculty of Arts - Icelandic,18
@@ -37,7 +37,7 @@ Faculty of Engineering - Electrical & Computer Engineering,36
 Faculty of Engineering - Mechanical & Manufacturing Engineering,37
 Faculty of Engineering - Design Engineering,38
 Faculty of Engineering - ENGAP (Engineering Access Program),39
-Faculty of Engineering - IEEQ Program (Interantionally-Educated Engineers Qualification),40
+Faculty of Engineering - IEEQ Program (Internationally-Educated Engineers Qualification),40
 "Clayton H. Riddell Faculty of Environment, Earth, and Resources - Department of Environment and  Geography",41
 "Clayton H. Riddell Faculty of Environment, Earth, and Resources - Department of Geological Sciences",42
 Faculty of Graduate Studies,43
@@ -51,7 +51,7 @@ Faculty of Medicine - Anesthesia,50
 Faculty of Medicine - Biochemistry and Medical Genetics,51
 Faculty of Medicine - Clinical Health Psychology,52
 Faculty of Medicine - Community Health Sciences,53
-Faculty of Medicine - Continuing Professtional Development,54
+Faculty of Medicine - Continuing Professional Development,54
 Faculty of Medicine - Family Medicine,55
 Faculty of Medicine - Emergency Medicine,56
 Faculty of Medicine - Human Anatomy and Cell Science,57
@@ -76,7 +76,7 @@ Faculty of Science - Biological Sciences,75
 Faculty of Science - Chemistry,76
 Faculty of Science - Mathematics,77
 Faculty of Science - Microbiology,78
-Faculty of Science - Phsics and Astronomy,79
+Faculty of Science - Physics and Astronomy,79
 Faculty of Science - Statistics,80
 Faculty of Science - Unis and Affiliates,81
 Faculty of Social Work,82
