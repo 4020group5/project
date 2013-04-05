@@ -8,7 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class DatabaseOpenHelper extends DaoMaster.OpenHelper {
+class DatabaseOpenHelper extends DaoMaster.OpenHelper {
 
 	private static final String DB_NAME = "db";
 
