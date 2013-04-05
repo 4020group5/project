@@ -12,4 +12,7 @@ public class SideButtonClickListenerFactory {
 	public static SideButtonClickListener getSearchOne(View pane, View anotherView) {
 		return new SideButtonClickListener(pane, anotherView, new SidePaneState("search"));
 	}
+	public static SideButtonClickListener getAdSearchOne(View pane, View anotherView) {
+		return new SideButtonClickListener(pane, anotherView, new SidePaneState("Advance search"));
+	}
 }
