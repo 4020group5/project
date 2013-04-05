@@ -4,6 +4,9 @@ import hci2.group5.project.dao.Department;
 import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
 import hci2.group5.project.util.MapViewUtil;
+
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -33,8 +36,13 @@ public class MainActivity extends Activity {
 	}
 
 	private void setUpSearchPaneForDepartmentsRelated() {
-		ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(this, android.R.layout.simple_list_item_1, DatabaseService.getAllDepartments(this));
+
 		AutoCompleteTextView autoCompleteDepartments = (AutoCompleteTextView) findViewById(R.id.autoCompleteDepartments);
+
+		List<Department> autoCompleteListData = DatabaseService.getAllDepartments(this);
+		int autoCompleteListItemViewId = R.layout.autocomplete_list_item;
+		ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(this, autoCompleteListItemViewId, autoCompleteListData);
+
 		autoCompleteDepartments.setAdapter(adapter);
 	}
 
