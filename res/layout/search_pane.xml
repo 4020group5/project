@@ -8,17 +8,35 @@
     android:layout_toRightOf="@id/navAndSearchButtons"
     android:orientation="vertical" >
 
+    <CheckBox
+        android:id="@+id/Food"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food" />
+
+    <CheckBox
+        android:id="@+id/Library"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Library" />
+
+    <CheckBox
+        android:id="@+id/Washroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Washroom" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Search departments" />
+        android:text="Search departments"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteDepartments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:imeOptions="actionSearch" />
+        android:imeOptions="actionSearch"
+        android:singleLine="true" />
 
 </LinearLayout>

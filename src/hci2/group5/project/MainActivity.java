@@ -50,15 +50,12 @@ public class MainActivity extends Activity {
 		View buttons = findViewById(R.id.navAndSearchButtons);
         ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
         ImageButton searchButton = (ImageButton) findViewById(R.id.searchButton);
-        ImageButton adSearchButton = (ImageButton) findViewById(R.id.adSearchButton);
-        
+
         View navPane = findViewById(R.id.navPane);
         View searchPane = findViewById(R.id.searchPane);
-        View adSearchPane = findViewById(R.id.adSearchPane);
 
         navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
         searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
-        adSearchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(adSearchPane, buttons));
 	}
 
     private void setUpGoogleMap() {
