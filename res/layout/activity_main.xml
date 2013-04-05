@@ -7,12 +7,16 @@
 
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/mapFragment"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        map:cameraZoom="15"
+        map:cameraTargetLat="49.809580"
+        map:cameraTargetLng="-97.132739" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
