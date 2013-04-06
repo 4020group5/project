@@ -2,6 +2,7 @@ package hci2.group5.project.db;
 
 import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DepartmentDao;
+import hci2.group5.project.dao.FacultyDao;
 import hci2.group5.project.dao.LocationDao;
 import hci2.group5.project.util.AssetsUtil;
 
@@ -33,6 +34,7 @@ class DataImporter {
 	public void importAllData() throws IOException {
 		_writableDb.beginTransaction();
 		try {
+			importFaculties();
 			importLocations();
 			importBuildings();
 			importDepartments();
@@ -42,6 +44,15 @@ class DataImporter {
 		finally {
 			_writableDb.endTransaction();
 		}
+	}
+
+	private void importFaculties() throws IOException {
+		String csvFileName = "faculties.csv";
+		String preparedInsertSqlStatement = String.format("INSERT INTO %s (%s) VALUES (?);",
+															FacultyDao.TABLENAME,
+															FacultyDao.Properties.Name.columnName);
+
+		importFromCsvFile(csvFileName, preparedInsertSqlStatement);
 	}
 
 	private void importLocations() throws IOException {
@@ -69,8 +80,9 @@ class DataImporter {
 
 	private void importDepartments() throws IOException {
 		String csvFileName = "departments.csv";
-		String preparedInsertSqlStatement = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?);",
+		String preparedInsertSqlStatement = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?);",
 															DepartmentDao.TABLENAME,
+															DepartmentDao.Properties.FacultyId.columnName,
 															DepartmentDao.Properties.Name.columnName,
 															DepartmentDao.Properties.BuildingId.columnName);
 
