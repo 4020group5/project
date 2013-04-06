@@ -2,24 +2,27 @@ package hci2.group5.project;
 
 import hci2.group5.project.dao.Department;
 import hci2.group5.project.db.DatabaseService;
+import hci2.group5.project.map.GoogleMapManager;
 import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
-import hci2.group5.project.util.MapViewUtil;
 
 import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 
 public class MainActivity extends Activity {
 
-    private GoogleMap _googleMap;
+    private GoogleMapManager _googleMapManager;
+
+	private ImageButton searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +44,27 @@ public class MainActivity extends Activity {
 
 		List<Department> autoCompleteListData = DatabaseService.getAllDepartments(this);
 		int autoCompleteListItemViewId = R.layout.autocomplete_list_item;
-		ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(this, autoCompleteListItemViewId, autoCompleteListData);
+		final ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(this, autoCompleteListItemViewId, autoCompleteListData);
 
 		autoCompleteDepartments.setAdapter(adapter);
+		autoCompleteDepartments.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Department department = adapter.getItem(position);
+				_googleMapManager.addDepartmentMarker(department);
+
+				// close search pane
+				searchButton.performClick();
+			}
+
+		});
 	}
 
 	private void initializeNavAndSearchButtonsAndPanes() {
 		View buttons = findViewById(R.id.navAndSearchButtons);
         ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
-        ImageButton searchButton = (ImageButton) findViewById(R.id.searchButton);
+        searchButton = (ImageButton) findViewById(R.id.searchButton);
 
         View navPane = findViewById(R.id.navPane);
         View searchPane = findViewById(R.id.searchPane);
@@ -60,15 +75,7 @@ public class MainActivity extends Activity {
 
     private void setUpGoogleMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
-        _googleMap = mapFragment.getMap();
-        setUpGoogleMapMyLocation(mapFragment);
-    }
-
-    private void setUpGoogleMapMyLocation(MapFragment mapFragment) {
-        // make the button show up
-        _googleMap.setMyLocationEnabled(true);
-        _googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        // move the button to bottom left
-        MapViewUtil.putMyLocationButtonBottomLeft(mapFragment);
+        _googleMapManager = new GoogleMapManager(mapFragment);
+        _googleMapManager.setUpMyLocationButton();
     }
 }
