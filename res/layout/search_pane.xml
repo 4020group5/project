@@ -5,32 +5,50 @@
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
     android:layout_marginRight="1dp"
+    android:layout_marginTop="12dp"
     android:layout_toRightOf="@id/navAndSearchButtons"
     android:orientation="vertical" >
 
-    <CheckBox
-        android:id="@+id/Food"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Food" />
+        android:layout_marginBottom="12dp"
+        android:gravity="fill_horizontal"
+        android:orientation="horizontal" >
 
-    <CheckBox
-        android:id="@+id/Library"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Library" />
+        <ImageButton
+            android:id="@+id/foodButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="food service"
+            android:src="@drawable/ic_food_service" />
 
-    <CheckBox
-        android:id="@+id/Washroom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Washroom" />
+        <ImageButton
+            android:id="@+id/washroomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="washrooms"
+            android:src="@drawable/ic_washroom" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search departments"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="Search libraries" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompletelibraries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:imeOptions="actionSearch"
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search departments" />
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteDepartments"
