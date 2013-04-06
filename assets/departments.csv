@@ -1,89 +1,88 @@
 facultyId,name,buildingId
 1,"Agribusiness & Agricultural Economics",9
-1,Animal Science,9
-1,Biosystems Engineering,9
-1,Entomology,9
-1,Food Science,9
+1,Animal Science,11
+1,Biosystems Engineering,2
+1,Entomology,11
+1,Food Science,15
 1,Plant Science,9
-1,Soil Science,9
+1,Soil Science,15
 1,School of Agriculture,9
-2,Architecture,5
-2,City Planning,6
-2,Interior Design,7
-2,Landscape Architecture,8
-2,Ph.D. in Planning and Design,9
-3,School of Art,10
-4,Anthropology,11
-4,Classics,12
-4,Economics,13
-4,"English, Film, & Theatre",14
-4,"French, Spanish & Italian",15
-4,German & Slavic Studies,16
-4,History,17
-4,Icelandic,18
-4,Linguistics,19
-4,Native Studies,20
-4,Philosophy,21
-4,Political Studies,22
-4,Psychology,23
-4,Religion,24
-4,Sociology,25
-5,Asper School of Business (Faculty of Management),26
-6,School of Dental Hygiene,27
-6,Clinical Support Services,28
-6,Dental Diagnostic & Surgical Sciences,29
-6,Oral Biology,30
-6,Preventive Dental Science,31
-6,Restorative Dentistry,32
-7,Faculty of Education,33
-8,Biosystems Engineering,34
-8,Civil Engineering,35
-8,Electrical & Computer Engineering,36
-8,Mechanical & Manufacturing Engineering,37
-8,Design Engineering,38
-8,ENGAP (Engineering Access Program),39
-8,IEEQ Program (Internationally-Educated Engineers Qualification),40
-9,"Environment and Geography",41
-9,"Geological Sciences",42
-10,Faculty of Graduate Studies,43
-11,Family Social Sciences,44
-11,Human Nutritional Sciences,45
-11,Textile Sciences,46
-12,Faculty of Kinesiology and Recreation Management,47
-13,Faculty of Law,48
-14,School of Medical Rehabilitation,49
-15,Anesthesia,50
-15,Biochemistry and Medical Genetics,51
-15,Clinical Health Psychology,52
-15,Community Health Sciences,53
-15,Continuing Professional Development,54
-15,Family Medicine,55
-15,Emergency Medicine,56
+2,Architecture,28
+2,City Planning,28
+2,Interior Design,28
+2,Landscape Architecture,28
+3,School of Art,52
+4,Anthropology,39
+4,Classics,5
+4,Economics,39
+4,"English, Film, & Theatre",39
+4,"French, Spanish & Italian",39
+4,German & Slavic Studies,39
+4,History,39
+4,Icelandic,5
+4,Linguistics,39
+4,Native Studies,22
+4,Philosophy,5
+4,Political Studies,39
+4,Psychology,14
+4,Religion,39
+4,Sociology,22
+5,Asper School of Business (Faculty of Management),53
+6,School of Dental Hygiene,54
+6,Clinical Support Services,54
+6,Dental Diagnostic & Surgical Sciences,54
+6,Oral Biology,54
+6,Preventive Dental Science,54
+6,Restorative Dentistry,54
+7,Faculty of Education,43
+8,Biosystems Engineering,2
+8,Civil Engineering,2
+8,Electrical & Computer Engineering,2
+8,Mechanical & Manufacturing Engineering,2
+8,Design Engineering,2
+8,ENGAP (Engineering Access Program),1
+8,IEEQ Program (Internationally-Educated Engineers Qualification),2
+9,"Environment and Geography",55
+9,"Geological Sciences",37
+10,Faculty of Graduate Studies,37
+11,Family Social Sciences,47
+11,Human Nutritional Sciences,14
+11,Textile Sciences,47
+12,Faculty of Kinesiology and Recreation Management,19
+13,Faculty of Law,4
+14,School of Medical Rehabilitation,55
+15,Anesthesia,56
+15,Biochemistry and Medical Genetics,57
+15,Clinical Health Psychology,58
+15,Community Health Sciences,59
+15,Continuing Professional Development,60
+15,Family Medicine,60
+15,Emergency Medicine,61
 15,Human Anatomy and Cell Science,57
-15,Immunology,58
-15,Internal Medicine,59
+15,Immunology,62
+15,Internal Medicine,60
 15,Medical Education,60
-15,Medical Microbiology,61
-15,"Obstetrics, Gynecology and Reproductive Sciences",62
-15,Ophthalmology,63
-15,Otolaryngology,64
+15,Medical Microbiology,58
+15,"Obstetrics, Gynecology and Reproductive Sciences",57
+15,Ophthalmology,64
+15,Otolaryngology,63
 15,Pathology,65
 15,Pediatrics and Child Health,66
 15,Pharmacology and Therapeutics,67
-15,Physiology,68
-15,Psychiatry,69
-15,Radiology,70
-15,Surgery,71
-16,Desautels Faculty of Music,72
-17,Faculty of Nursing,73
-18,Faculty of Pharmacy,74
-19,Biological Sciences,75
-19,Chemistry,76
+15,Physiology,57
+15,Psychiatry,58
+15,Radiology,68
+15,Surgery,68
+16,Desautels Faculty of Music,69
+17,Faculty of Nursing,41
+18,Faculty of Pharmacy,62
+19,Biological Sciences,14
+19,Chemistry,31
 19,Computer Science,2
-19,Mathematics,77
-19,Microbiology,78
-19,Physics and Astronomy,79
-19,Statistics,80
-20,Faculty of Social Work,82
-21,Division of Extended Education,83
-22,University 1,84
+19,Mathematics,23
+19,Microbiology,46
+19,Physics and Astronomy,32
+19,Statistics,23
+20,Faculty of Social Work,38
+21,Extended Education,42
+22,University 1,38
