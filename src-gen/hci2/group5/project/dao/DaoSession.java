@@ -9,10 +9,12 @@ import de.greenrobot.dao.AbstractDaoSession;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
+import hci2.group5.project.dao.Faculty;
 import hci2.group5.project.dao.Location;
 import hci2.group5.project.dao.Building;
 import hci2.group5.project.dao.Department;
 
+import hci2.group5.project.dao.FacultyDao;
 import hci2.group5.project.dao.LocationDao;
 import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DepartmentDao;
@@ -26,10 +28,12 @@ import hci2.group5.project.dao.DepartmentDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig facultyDaoConfig;
     private final DaoConfig locationDaoConfig;
     private final DaoConfig buildingDaoConfig;
     private final DaoConfig departmentDaoConfig;
 
+    private final FacultyDao facultyDao;
     private final LocationDao locationDao;
     private final BuildingDao buildingDao;
     private final DepartmentDao departmentDao;
@@ -37,6 +41,9 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        facultyDaoConfig = daoConfigMap.get(FacultyDao.class).clone();
+        facultyDaoConfig.initIdentityScope(type);
 
         locationDaoConfig = daoConfigMap.get(LocationDao.class).clone();
         locationDaoConfig.initIdentityScope(type);
@@ -47,19 +54,26 @@ public class DaoSession extends AbstractDaoSession {
         departmentDaoConfig = daoConfigMap.get(DepartmentDao.class).clone();
         departmentDaoConfig.initIdentityScope(type);
 
+        facultyDao = new FacultyDao(facultyDaoConfig, this);
         locationDao = new LocationDao(locationDaoConfig, this);
         buildingDao = new BuildingDao(buildingDaoConfig, this);
         departmentDao = new DepartmentDao(departmentDaoConfig, this);
 
+        registerDao(Faculty.class, facultyDao);
         registerDao(Location.class, locationDao);
         registerDao(Building.class, buildingDao);
         registerDao(Department.class, departmentDao);
     }
     
     public void clear() {
+        facultyDaoConfig.getIdentityScope().clear();
         locationDaoConfig.getIdentityScope().clear();
         buildingDaoConfig.getIdentityScope().clear();
         departmentDaoConfig.getIdentityScope().clear();
+    }
+
+    public FacultyDao getFacultyDao() {
+        return facultyDao;
     }
 
     public LocationDao getLocationDao() {

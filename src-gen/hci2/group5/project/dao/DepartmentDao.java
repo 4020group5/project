@@ -29,8 +29,9 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property BuildingId = new Property(2, long.class, "buildingId", false, "BUILDING_ID");
+        public final static Property FacultyId = new Property(1, long.class, "facultyId", false, "FACULTY_ID");
+        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property BuildingId = new Property(3, long.class, "buildingId", false, "BUILDING_ID");
     };
 
     private DaoSession daoSession;
@@ -51,8 +52,9 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'DEPARTMENT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'NAME' TEXT NOT NULL ," + // 1: name
-                "'BUILDING_ID' INTEGER NOT NULL );"); // 2: buildingId
+                "'FACULTY_ID' INTEGER NOT NULL ," + // 1: facultyId
+                "'NAME' TEXT NOT NULL ," + // 2: name
+                "'BUILDING_ID' INTEGER NOT NULL );"); // 3: buildingId
     }
 
     /** Drops the underlying database table. */
@@ -70,8 +72,9 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindString(2, entity.getName());
-        stmt.bindLong(3, entity.getBuildingId());
+        stmt.bindLong(2, entity.getFacultyId());
+        stmt.bindString(3, entity.getName());
+        stmt.bindLong(4, entity.getBuildingId());
     }
 
     @Override
@@ -91,8 +94,9 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
     public Department readEntity(Cursor cursor, int offset) {
         Department entity = new Department( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // name
-            cursor.getLong(offset + 2) // buildingId
+            cursor.getLong(offset + 1), // facultyId
+            cursor.getString(offset + 2), // name
+            cursor.getLong(offset + 3) // buildingId
         );
         return entity;
     }
@@ -101,8 +105,9 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
     @Override
     public void readEntity(Cursor cursor, Department entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setName(cursor.getString(offset + 1));
-        entity.setBuildingId(cursor.getLong(offset + 2));
+        entity.setFacultyId(cursor.getLong(offset + 1));
+        entity.setName(cursor.getString(offset + 2));
+        entity.setBuildingId(cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -150,9 +155,12 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getBuildingDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getFacultyDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getBuildingDao().getAllColumns());
             builder.append(" FROM DEPARTMENT T");
-            builder.append(" LEFT JOIN BUILDING T0 ON T.'BUILDING_ID'=T0.'_id'");
+            builder.append(" LEFT JOIN FACULTY T0 ON T.'FACULTY_ID'=T0.'_id'");
+            builder.append(" LEFT JOIN BUILDING T1 ON T.'BUILDING_ID'=T1.'_id'");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -162,6 +170,12 @@ public class DepartmentDao extends AbstractDao<Department, Long> {
     protected Department loadCurrentDeep(Cursor cursor, boolean lock) {
         Department entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
+
+        Faculty faculty = loadCurrentOther(daoSession.getFacultyDao(), cursor, offset);
+         if(faculty != null) {
+            entity.setFaculty(faculty);
+        }
+        offset += daoSession.getFacultyDao().getAllColumns().length;
 
         Building building = loadCurrentOther(daoSession.getBuildingDao(), cursor, offset);
          if(building != null) {
