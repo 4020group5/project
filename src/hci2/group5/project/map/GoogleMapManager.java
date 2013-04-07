@@ -1,9 +1,13 @@
 package hci2.group5.project.map;
 
 import hci2.group5.project.dao.Department;
+import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 import hci2.group5.project.map.marker.MarkerFactory;
 import hci2.group5.project.util.MapViewUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,6 +52,11 @@ public class GoogleMapManager {
 		_markerManager.showLastAddedMarkerInfowindow();
 		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(library.getLocation().toLatLng(), DECENT_ZOOM_LEVEL));
 	}
+
+	public void addFoodServiceMarkers(List<FoodService> foodServices) {
+		_markerManager.removeAllMarkersIfNeeded();
+		_markerManager.addFoodServiceMarkers(foodServices);
+	}
 }
 
 class UiManager {
@@ -65,31 +74,48 @@ class MarkerManager {
 
 	private GoogleMap _googleMap;
 
-	private Marker _lastAddedMarker;
+	private List<Marker> _lastAddedMarkers;
 
 	public MarkerManager(GoogleMap googleMap) {
 		_googleMap = googleMap;
+		_lastAddedMarkers = new ArrayList<Marker>();
+	}
+
+	public void addFoodServiceMarkers(List<FoodService> foodServices) {
+		for (FoodService foodService : foodServices) {
+			Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getFoodServiceMarker(foodService));
+			_markerAdded(anotherMarker);
+		}
+
 	}
 
 	public void addLibraryMarker(Library library) {
 		Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getLibraryMarker(library));
-		_lastAddedMarker = anotherMarker;
+		_markerAdded(anotherMarker);
+	}
+
+	private void _markerAdded(Marker marker) {
+		_lastAddedMarkers.add(marker);
 	}
 
 	public void removeAllMarkersIfNeeded() {
-		if (_lastAddedMarker != null) {
-			_lastAddedMarker.remove();
+		if ( ! _lastAddedMarkers.isEmpty()) {
+			for (Marker marker : _lastAddedMarkers) {
+				marker.remove();
+			}
+			_lastAddedMarkers.clear();
 		}
 	}
 
 	public void addDepartmentMarker(Department department) {
 		Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getDepartmentMarker(department));
-		_lastAddedMarker = anotherMarker;
+		_markerAdded(anotherMarker);
 	}
 
 	public void showLastAddedMarkerInfowindow() {
-		if (_lastAddedMarker != null) {
-			_lastAddedMarker.showInfoWindow();
+		if ( ! _lastAddedMarkers.isEmpty()) {
+			Marker lastAddedMarker = _lastAddedMarkers.get(_lastAddedMarkers.size() - 1);
+			lastAddedMarker.showInfoWindow();
 		}
 	}
 }

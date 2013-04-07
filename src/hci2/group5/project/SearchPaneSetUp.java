@@ -2,6 +2,7 @@ package hci2.group5.project;
 
 import hci2.group5.project.dao.DaoSession;
 import hci2.group5.project.dao.Department;
+import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.GoogleMapManager;
@@ -38,8 +39,22 @@ public class SearchPaneSetUp {
 
 	public void setUp() {
 		DaoSession daoSession = DatabaseService.getDaoSession(_activity);
+		setUpFoodServiceRelated(DatabaseService.getAllFoodServices(daoSession));
 		setUpDepartmentRelated(DatabaseService.getAllDepartments(daoSession));
 		setUpLibraryRelated(DatabaseService.getAllLibraries(daoSession));
+	}
+
+	private void setUpFoodServiceRelated(final List<FoodService> foodServices) {
+		ImageButton foodButton = (ImageButton) _activity.findViewById(R.id.foodButton);
+		foodButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				_googleMapManager.addFoodServiceMarkers(foodServices);
+				closeSearchPane();
+			}
+		});
+
 	}
 
 	private void setUpLibraryRelated(List<Library> libraries) {

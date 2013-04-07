@@ -3,6 +3,7 @@ package hci2.group5.project.db;
 import hci2.group5.project.dao.DaoMaster;
 import hci2.group5.project.dao.DaoSession;
 import hci2.group5.project.dao.Department;
+import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 
 import java.util.List;
@@ -35,5 +36,9 @@ public class DatabaseService {
 
 	public static List<Library> getAllLibraries(DaoSession daoSession) {
 		return daoSession.getLibraryDao().queryBuilder().list();
+	}
+
+	public static List<FoodService> getAllFoodServices(DaoSession daoSession) {
+		return daoSession.getFoodServiceDao().queryBuilder().list();
 	}
 }
