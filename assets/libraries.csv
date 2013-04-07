@@ -1,11 +1,11 @@
-name,locationid
-Albert D. Cohen Management Library,1
-E.K. Williams Law Library,2
-Sciences and Technology Library,3
-St. John's College Library,4
-Father Harold Drake Library (St. Paul's College),5
-Donald W. Craik Engineering Library (Third floor),6
-Architecture/Fine Arts Library,7
-Eckhardt-Gramatt¨¦ Music Library,8
-William R. Newman Library (Agriculture second floor),9
-Elizabeth Dafoe Library,10
+name,room,buildingId
+Elizabeth Dafoe Library,,13
+Albert D. Cohen Management Library,208,53
+E.K. Williams Law Library,401,14
+Sciences and Technology Library,211,23
+St. John's College Library,321,34
+Father Harold Drake Library (St. Paul's College),119,35
+Donald W. Craik Engineering Library,E3-361,2
+Architecture/Fine Arts Library,206,28
+Eckhardt-Gramatt's Music Library,223/4,69
+William R. Newman Library (Agriculture),232,8
