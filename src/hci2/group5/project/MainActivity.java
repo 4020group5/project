@@ -4,17 +4,21 @@ import hci2.group5.project.dao.Department;
 import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.GoogleMapManager;
 import hci2.group5.project.sideButton.SideButtonClickListenerFactory;
+import hci2.group5.project.util.ImeUtils;
 
 import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.MapFragment;
 
@@ -39,14 +43,15 @@ public class MainActivity extends Activity {
 	}
 
 	private void setUpSearchPaneForDepartmentsRelated() {
-
-		AutoCompleteTextView autoCompleteDepartments = (AutoCompleteTextView) findViewById(R.id.autoCompleteDepartments);
+		final AutoCompleteTextView autoCompleteDepartments = (AutoCompleteTextView) findViewById(R.id.autoCompleteDepartments);
 
 		List<Department> autoCompleteListData = DatabaseService.getAllDepartments(this);
 		int autoCompleteListItemViewId = R.layout.autocomplete_list_item;
 		final ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(this, autoCompleteListItemViewId, autoCompleteListData);
 
 		autoCompleteDepartments.setAdapter(adapter);
+
+		final Activity thisActivity = this;
 		autoCompleteDepartments.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -56,8 +61,24 @@ public class MainActivity extends Activity {
 
 				// close search pane
 				searchButton.performClick();
+
+				ImeUtils.hideSoftInput(thisActivity);
 			}
 
+		});
+
+		autoCompleteDepartments.setOnEditorActionListener(new AutoCompleteTextView.OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				boolean isHandled = false;
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					autoCompleteDepartments.showDropDown();
+					isHandled = true;
+				}
+
+				return isHandled;
+			}
 		});
 	}
 
