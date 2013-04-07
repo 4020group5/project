@@ -3,6 +3,7 @@ package hci2.group5.project.db;
 import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DepartmentDao;
 import hci2.group5.project.dao.FacultyDao;
+import hci2.group5.project.dao.FoodServiceDao;
 import hci2.group5.project.dao.LibraryDao;
 import hci2.group5.project.dao.LocationDao;
 import hci2.group5.project.util.AssetsUtil;
@@ -41,6 +42,7 @@ class DataImporter {
 			importDepartments();
 
 			importLibraries();
+			importFoodServices();
 
 			_writableDb.setTransactionSuccessful();
 		}
@@ -99,6 +101,19 @@ class DataImporter {
 															LibraryDao.Properties.Name.columnName,
 															LibraryDao.Properties.Room.columnName,
 															LibraryDao.Properties.BuildingId.columnName);
+
+		importFromCsvFile(csvFileName, preparedInsertSqlStatement);
+	}
+
+	private void importFoodServices() throws IOException {
+		String csvFileName = "food_services.csv";
+		String preparedInsertSqlStatement = String.format("INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?);",
+															FoodServiceDao.TABLENAME,
+															FoodServiceDao.Properties.Name.columnName,
+															FoodServiceDao.Properties.Floor.columnName,
+															FoodServiceDao.Properties.BuildingId.columnName,
+															FoodServiceDao.Properties.Latitude.columnName,
+															FoodServiceDao.Properties.Longitude.columnName);
 
 		importFromCsvFile(csvFileName, preparedInsertSqlStatement);
 	}
