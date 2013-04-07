@@ -3,6 +3,7 @@ package hci2.group5.project.db;
 import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DepartmentDao;
 import hci2.group5.project.dao.FacultyDao;
+import hci2.group5.project.dao.LibraryDao;
 import hci2.group5.project.dao.LocationDao;
 import hci2.group5.project.util.AssetsUtil;
 
@@ -38,6 +39,8 @@ class DataImporter {
 			importLocations();
 			importBuildings();
 			importDepartments();
+
+			importLibraries();
 
 			_writableDb.setTransactionSuccessful();
 		}
@@ -85,6 +88,17 @@ class DataImporter {
 															DepartmentDao.Properties.FacultyId.columnName,
 															DepartmentDao.Properties.Name.columnName,
 															DepartmentDao.Properties.BuildingId.columnName);
+
+		importFromCsvFile(csvFileName, preparedInsertSqlStatement);
+	}
+
+	private void importLibraries() throws IOException {
+		String csvFileName = "libraries.csv";
+		String preparedInsertSqlStatement = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?);",
+															LibraryDao.TABLENAME,
+															LibraryDao.Properties.Name.columnName,
+															LibraryDao.Properties.Room.columnName,
+															LibraryDao.Properties.BuildingId.columnName);
 
 		importFromCsvFile(csvFileName, preparedInsertSqlStatement);
 	}

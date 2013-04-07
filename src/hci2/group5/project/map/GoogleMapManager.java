@@ -1,6 +1,7 @@
 package hci2.group5.project.map;
 
 import hci2.group5.project.dao.Department;
+import hci2.group5.project.dao.Library;
 import hci2.group5.project.map.marker.MarkerFactory;
 import hci2.group5.project.util.MapViewUtil;
 
@@ -35,10 +36,17 @@ public class GoogleMapManager {
 	}
 
 	public void addDepartmentMarker(Department department) {
-		_markerManager.removeLastAddedDepartmentMarkerIfNeeded();
+		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addDepartmentMarker(department);
-		_markerManager.showLastAddedDepartmentMarkerInfowindow();
+		_markerManager.showLastAddedMarkerInfowindow();
 		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(department.getLocation().toLatLng(), DECENT_ZOOM_LEVEL));
+	}
+
+	public void addLibraryMarker(Library library) {
+		_markerManager.removeAllMarkersIfNeeded();
+		_markerManager.addLibraryMarker(library);
+		_markerManager.showLastAddedMarkerInfowindow();
+		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(library.getLocation().toLatLng(), DECENT_ZOOM_LEVEL));
 	}
 }
 
@@ -57,26 +65,31 @@ class MarkerManager {
 
 	private GoogleMap _googleMap;
 
-	private Marker _lastPlacedDepartmentMarker;
+	private Marker _lastAddedMarker;
 
 	public MarkerManager(GoogleMap googleMap) {
 		_googleMap = googleMap;
 	}
 
-	public void removeLastAddedDepartmentMarkerIfNeeded() {
-		if (_lastPlacedDepartmentMarker != null) {
-			_lastPlacedDepartmentMarker.remove();
+	public void addLibraryMarker(Library library) {
+		Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getLibraryMarker(library));
+		_lastAddedMarker = anotherMarker;
+	}
+
+	public void removeAllMarkersIfNeeded() {
+		if (_lastAddedMarker != null) {
+			_lastAddedMarker.remove();
 		}
 	}
 
 	public void addDepartmentMarker(Department department) {
 		Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getDepartmentMarker(department));
-		_lastPlacedDepartmentMarker = anotherMarker;
+		_lastAddedMarker = anotherMarker;
 	}
 
-	public void showLastAddedDepartmentMarkerInfowindow() {
-		if (_lastPlacedDepartmentMarker != null) {
-			_lastPlacedDepartmentMarker.showInfoWindow();
+	public void showLastAddedMarkerInfowindow() {
+		if (_lastAddedMarker != null) {
+			_lastAddedMarker.showInfoWindow();
 		}
 	}
 }
