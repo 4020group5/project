@@ -8,6 +8,7 @@ import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.GoogleMapManager;
 import hci2.group5.project.util.ImeUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -31,10 +32,14 @@ public class SearchPaneSetUp {
 
 	private GoogleMapManager _googleMapManager;
 
+	private ResetHelper _resetHelper;
+
 	public SearchPaneSetUp(Activity activity, GoogleMapManager googleMapManager) {
 		_activity = activity;
 		_searchButton = (ImageButton) activity.findViewById(R.id.searchButton);
 		_googleMapManager = googleMapManager;
+
+		_resetHelper = new ResetHelper();
 	}
 
 	public void setUp() {
@@ -51,6 +56,7 @@ public class SearchPaneSetUp {
 			@Override
 			public void onClick(View v) {
 				_googleMapManager.addFoodServiceMarkers(foodServices);
+				_resetHelper.resetAll();
 				closeSearchPane();
 			}
 		});
@@ -77,6 +83,7 @@ public class SearchPaneSetUp {
 					@Override
 					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 						if (position == chooseLibraryItemPosition) {
+							_resetHelper.removeViewToBeReset(spinnerLibrary);
 							return;
 						}
 
@@ -84,6 +91,9 @@ public class SearchPaneSetUp {
 						_googleMapManager.addLibraryMarker(library);
 
 						closeSearchPane();
+
+						_resetHelper.resetAllExcept(spinnerLibrary);
+						_resetHelper.addViewToBeReset(spinnerLibrary);
 					}
 
 					@Override
@@ -113,6 +123,10 @@ public class SearchPaneSetUp {
 				closeSearchPane();
 
 				ImeUtils.hideSoftInput(_activity);
+
+				_resetHelper.addViewToBeReset(autoCompleteDepartments);
+				_resetHelper.resetAllExcept(autoCompleteDepartments);
+
 			}
 		});
 
@@ -133,5 +147,54 @@ public class SearchPaneSetUp {
 
 	private void closeSearchPane() {
 		_searchButton.performClick();
+	}
+}
+
+/**
+ * Limited support
+ *
+ */
+class ResetHelper {
+
+	private List<View> viewsToBeReset;
+
+	public ResetHelper() {
+		viewsToBeReset = new ArrayList<View>();
+	}
+
+	public void addViewToBeReset(View v) {
+		viewsToBeReset.add(v);
+	}
+
+	public void removeViewToBeReset(View v) {
+		viewsToBeReset.remove(v);
+	}
+
+	public void resetAll() {
+		resetAllExcept(null);
+	}
+
+	public void resetAllExcept(View exeptionView) {
+
+		List<View> toBeRemovedList = new ArrayList<View>();
+
+		for (View view : viewsToBeReset) {
+
+			if (view != exeptionView) {
+
+				if (view instanceof AutoCompleteTextView) {
+					AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) view;
+					autoCompleteTextView.setText("");
+					toBeRemovedList.add(view);
+				}
+				else if (view instanceof Spinner) {
+					Spinner spinner = (Spinner) view;
+					spinner.setSelection(0);
+					toBeRemovedList.add(view);
+				}
+			}
+		}
+
+		viewsToBeReset.removeAll(toBeRemovedList);
 	}
 }
