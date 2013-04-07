@@ -4,7 +4,7 @@ facultyId,name,buildingId
 1,Biosystems Engineering,2
 1,Entomology,11
 1,Food Science,15
-1,Plant Science,9
+1,Plant Science,8
 1,Soil Science,15
 1,School of Agriculture,9
 2,Architecture,28
@@ -44,7 +44,7 @@ facultyId,name,buildingId
 8,IEEQ Program (Internationally-Educated Engineers Qualification),2
 9,"Environment and Geography",55
 9,"Geological Sciences",37
-10,Faculty of Graduate Studies,37
+10,Faculty of Graduate Studies,36
 11,Family Social Sciences,47
 11,Human Nutritional Sciences,14
 11,Textile Sciences,47
