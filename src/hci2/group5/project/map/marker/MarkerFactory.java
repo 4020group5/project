@@ -7,11 +7,7 @@ import hci2.group5.project.dao.Library;
 
 import java.util.List;
 
-<<<<<<< HEAD
 import com.google.android.gms.maps.model.BitmapDescriptor;
-=======
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
->>>>>>> fbb3ef8c0a90aaa9d8291a04e5f2052b8dc6f821
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerFactory {
