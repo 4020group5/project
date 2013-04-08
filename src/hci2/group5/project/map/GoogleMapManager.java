@@ -40,6 +40,7 @@ public class GoogleMapManager {
 	private MyMarkClickListener markerClickListener;
 	private MyMapClickListener mapClickListener;
 	private MyCameraChangeListener cameraChangeListener;
+	private MyLocationChangeListener myLocationChangeListener;
 
 	public float currentZoom;
 
@@ -56,7 +57,8 @@ public class GoogleMapManager {
 		_googleMap.setOnMapClickListener(mapClickListener);
 		cameraChangeListener=new MyCameraChangeListener(this);
 		_googleMap.setOnCameraChangeListener(cameraChangeListener);
-
+		myLocationChangeListener = new MyLocationChangeListener(_googleMap);
+		_googleMap.setOnMyLocationChangeListener(myLocationChangeListener);
 	}
 
 	public void initMapIfNeeded() {
