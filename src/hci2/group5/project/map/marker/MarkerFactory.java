@@ -5,8 +5,6 @@ import hci2.group5.project.dao.Department;
 import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 
-import java.util.List;
-
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -40,15 +38,37 @@ public class MarkerFactory {
 	}
 
 	public static MarkerOptions getBuildingMarker(Building building, BitmapDescriptor icon) {
-		String departmentStr = "";
-		List<Department> departments = building.getDepartments();
-		for (int i = 0; i < departments.size(); i++) {
-			departmentStr = departmentStr + departments.get(i).getName() + " ";
+		MarkerOptions buildingMarkerOptions = new MarkerOptions().icon(icon)
+				.position(building.getLocation().toLatLng())
+				.title(building.getName());
+
+
+		setSnippetIfNeeded(building, buildingMarkerOptions);
+
+		return buildingMarkerOptions;
+	}
+
+	private static void setSnippetIfNeeded(Building building, MarkerOptions buildingMarkerOptions) {
+
+		final String clickForMore = "(click for more) TODO";
+
+		String snippet;
+
+		if (building.hasBuiltInfo() && building.hasSupplementaryInfo()) {
+			snippet = building.getBuiltInfo() + " " + clickForMore;
+		}
+		else if (building.hasBuiltInfo()) { // only has built info
+			snippet = building.getBuiltInfo();
+		}
+		else if (building.hasSupplementaryInfo()) { // only has supplementary info
+			snippet = clickForMore;
+		}
+		else { // has neither built info nor supplementary info
+			snippet = "";
 		}
 
-		String info = "Builder: " + building.getBuiltBy() + "\nBuilt year: "
-				+ building.getBuiltYear() + "\nDepartments: " + departmentStr
-				+ "\nSupply information: " + building.getSupplementaryInfo();
-		return new MarkerOptions().position(building.getLocation().toLatLng()).title(building.getName()).snippet(info).icon(icon);
+		if ( ! snippet.isEmpty()) {
+			buildingMarkerOptions.snippet(snippet);
+		}
 	}
 }
