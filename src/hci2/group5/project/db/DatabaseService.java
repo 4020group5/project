@@ -1,5 +1,6 @@
 package hci2.group5.project.db;
 
+import hci2.group5.project.dao.Building;
 import hci2.group5.project.dao.DaoMaster;
 import hci2.group5.project.dao.DaoSession;
 import hci2.group5.project.dao.Department;
@@ -23,13 +24,6 @@ public class DatabaseService {
 		return daoSession;
 	}
 
-	/**
-	 * Convenient method. Ideally, you should call getAllDepartments(DaoSession).
-	 */
-	public static List<Department> getAllDepartments(Context context) {
-		return getAllDepartments(getDaoSession(context));
-	}
-
 	public static List<Department> getAllDepartments(DaoSession daoSession) {
 		return daoSession.getDepartmentDao().queryBuilder().list();
 	}
@@ -40,5 +34,9 @@ public class DatabaseService {
 
 	public static List<FoodService> getAllFoodServices(DaoSession daoSession) {
 		return daoSession.getFoodServiceDao().queryBuilder().list();
+	}
+
+	public static List<Building> getAllBuildings(DaoSession daoSession) {
+		return daoSession.getBuildingDao().queryBuilder().list();
 	}
 }
