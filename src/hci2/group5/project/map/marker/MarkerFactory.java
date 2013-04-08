@@ -7,6 +7,7 @@ import hci2.group5.project.dao.Library;
 
 import java.util.List;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerFactory {
@@ -38,7 +39,7 @@ public class MarkerFactory {
 								  .snippet(snippet);
 	}
 
-	public static MarkerOptions getBuildingMarker(Building building){
+	public static MarkerOptions getBuildingMarker(Building building, BitmapDescriptor icon) {
 		String departmentStr = "";
 		List<Department> departments = building.getDepartments();
 		for (int i = 0; i < departments.size(); i++) {
@@ -48,6 +49,6 @@ public class MarkerFactory {
 		String info = "Builder: " + building.getBuiltBy() + "\nBuilt year: "
 				+ building.getBuiltYear() + "\nDepartments: " + departmentStr
 				+ "\nSupply information: " + building.getSupplementaryInfo();
-		return new MarkerOptions().position(building.getLocation().toLatLng()).title(building.getName()).snippet(info);
+		return new MarkerOptions().position(building.getLocation().toLatLng()).title(building.getName()).snippet(info).icon(icon);
 	}
 }

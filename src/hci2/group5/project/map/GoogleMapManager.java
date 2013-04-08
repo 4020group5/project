@@ -1,5 +1,6 @@
 package hci2.group5.project.map;
 
+import hci2.group5.project.R;
 import hci2.group5.project.dao.Building;
 import hci2.group5.project.dao.DaoSession;
 import hci2.group5.project.dao.Department;
@@ -12,9 +13,15 @@ import hci2.group5.project.util.MapViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 
 public class GoogleMapManager {
@@ -47,6 +54,13 @@ public class GoogleMapManager {
 				// then MapFragment will show a label and a button directing user to download google play service
 			}
 
+			try {
+				MapsInitializer.initialize(_mapFragment.getActivity());
+			} catch (GooglePlayServicesNotAvailableException e) {
+				Log.e(GoogleMapManager.class.getSimpleName(), e.toString());
+				return;
+			}
+
 			_uiManager = new UiManager();
 			_markerManager = new MarkerManager(_googleMap);
 
@@ -59,7 +73,8 @@ public class GoogleMapManager {
     	DaoSession daoSession = DatabaseService.getDaoSession(_mapFragment.getActivity());
     	List<Building> buildings = DatabaseService.getAllBuildings(daoSession);
 
-    	_markerManager.addBuildingMarkers(buildings);
+    	BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_building_clickable_icon);
+    	_markerManager.addBuildingMarkers(buildings, icon);
 	}
 
 	public void setUpMyLocationButton() {
@@ -108,9 +123,9 @@ class MarkerManager {
 		_lastAddedMarkers = new ArrayList<Marker>();
 	}
 
-	public void addBuildingMarkers(List<Building> buildings) {
+	public void addBuildingMarkers(List<Building> buildings, BitmapDescriptor icon) {
 		for (Building building : buildings) {
-			_googleMap.addMarker(MarkerFactory.getBuildingMarker(building));
+			_googleMap.addMarker(MarkerFactory.getBuildingMarker(building, icon));
 		}
 	}
 
