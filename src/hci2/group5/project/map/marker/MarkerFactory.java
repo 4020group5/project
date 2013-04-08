@@ -1,8 +1,11 @@
 package hci2.group5.project.map.marker;
 
+import hci2.group5.project.dao.Building;
 import hci2.group5.project.dao.Department;
 import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
+
+import java.util.List;
 
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,5 +36,18 @@ public class MarkerFactory {
 		return new MarkerOptions().position(foodService.getLocation().toLatLng())
 								  .title(foodService.getName())
 								  .snippet(snippet);
+	}
+
+	public static MarkerOptions getBuildingMarker(Building building){
+		String departmentStr = "";
+		List<Department> departments = building.getDepartments();
+		for (int i = 0; i < departments.size(); i++) {
+			departmentStr = departmentStr + departments.get(i).getName() + " ";
+		}
+
+		String info = "Builder: " + building.getBuiltBy() + "\nBuilt year: "
+				+ building.getBuiltYear() + "\nDepartments: " + departmentStr
+				+ "\nSupply information: " + building.getSupplementaryInfo();
+		return new MarkerOptions().position(building.getLocation().toLatLng()).title(building.getName()).snippet(info);
 	}
 }

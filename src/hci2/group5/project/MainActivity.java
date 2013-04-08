@@ -40,6 +40,6 @@ public class MainActivity extends Activity {
     private void setUpGoogleMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
         _googleMapManager = new GoogleMapManager(mapFragment);
-        _googleMapManager.setUpMyLocationButton();
+        _googleMapManager.initMap();
     }
 }

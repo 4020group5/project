@@ -1,8 +1,11 @@
 package hci2.group5.project.map;
 
+import hci2.group5.project.dao.Building;
+import hci2.group5.project.dao.DaoSession;
 import hci2.group5.project.dao.Department;
 import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
+import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.marker.MarkerFactory;
 import hci2.group5.project.util.MapViewUtil;
 
@@ -33,6 +36,18 @@ public class GoogleMapManager {
 
 		_uiManager = new UiManager();
 		_markerManager = new MarkerManager(_googleMap);
+	}
+
+	public void initMap() {
+		setUpMyLocationButton();
+        addBuildingMarkers();
+	}
+
+	public void addBuildingMarkers() {
+    	DaoSession daoSession = DatabaseService.getDaoSession(_mapFragment.getActivity());
+    	List<Building> buildings = DatabaseService.getAllBuildings(daoSession);
+
+    	_markerManager.addBuildingMarkers(buildings);
 	}
 
 	public void setUpMyLocationButton() {
@@ -79,6 +94,12 @@ class MarkerManager {
 	public MarkerManager(GoogleMap googleMap) {
 		_googleMap = googleMap;
 		_lastAddedMarkers = new ArrayList<Marker>();
+	}
+
+	public void addBuildingMarkers(List<Building> buildings) {
+		for (Building building : buildings) {
+			_googleMap.addMarker(MarkerFactory.getBuildingMarker(building));
+		}
 	}
 
 	public void addFoodServiceMarkers(List<FoodService> foodServices) {
