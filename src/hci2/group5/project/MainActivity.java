@@ -25,6 +25,14 @@ public class MainActivity extends Activity {
         new SearchPaneSetUp(this, _googleMapManager).setUp();
     }
 
+    @Override
+    protected void onResume() {
+    	super.onResume();
+
+    	// handle case that google map service is not available on user's device
+    	_googleMapManager.initMapIfNeeded();
+    }
+
 	private void initializeNavAndSearchButtonsAndPanes() {
 		View buttons = findViewById(R.id.navAndSearchButtons);
         ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
@@ -40,6 +48,5 @@ public class MainActivity extends Activity {
     private void setUpGoogleMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
         _googleMapManager = new GoogleMapManager(mapFragment);
-        _googleMapManager.initMap();
     }
 }

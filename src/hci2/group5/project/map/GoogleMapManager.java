@@ -32,15 +32,27 @@ public class GoogleMapManager {
 
 	public GoogleMapManager(MapFragment mapFragment) {
 		_mapFragment = mapFragment;
-		_googleMap = mapFragment.getMap();
-
-		_uiManager = new UiManager();
-		_markerManager = new MarkerManager(_googleMap);
+		initMapIfNeeded();
 	}
 
-	public void initMap() {
-		setUpMyLocationButton();
-        addBuildingMarkers();
+	public void initMapIfNeeded() {
+		if (_googleMap == null) {
+			// 2 cases now. It's either google play service is unavailable or not really initialized
+
+			_googleMap = _mapFragment.getMap();
+			if (_googleMap == null) {
+				// google play service is not available on user's device, we simply return.
+				// activity will call this method in onResume()
+				return;
+				// then MapFragment will show a label and a button directing user to download google play service
+			}
+
+			_uiManager = new UiManager();
+			_markerManager = new MarkerManager(_googleMap);
+
+			setUpMyLocationButton();
+	        addBuildingMarkers();
+		}
 	}
 
 	public void addBuildingMarkers() {
