@@ -8,6 +8,7 @@ import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.marker.MarkerFactory;
+import hci2.group5.project.map.marker.MyMarkClickListener;
 import hci2.group5.project.util.MapViewUtil;
 
 import java.util.ArrayList;
@@ -31,15 +32,31 @@ public class GoogleMapManager {
 	 */
 	private static final float DECENT_ZOOM_LEVEL = 17f;
 
-	private GoogleMap _googleMap;
+	public GoogleMap _googleMap;
 	private MapFragment _mapFragment;
 
 	private UiManager _uiManager;
 	private MarkerManager _markerManager;
+	private MyMarkClickListener markerClickListener;
+	private MyMapClickListener mapClickListener;
+	private MyCameraChangeListener cameraChangeListener;
+
+	public float currentZoom;
 
 	public GoogleMapManager(MapFragment mapFragment) {
 		_mapFragment = mapFragment;
 		initMapIfNeeded();
+		initListener();
+	}
+
+	public void initListener() {
+		markerClickListener=new MyMarkClickListener(this);
+		_googleMap.setOnMarkerClickListener(markerClickListener);
+		mapClickListener=new MyMapClickListener(this);
+		_googleMap.setOnMapClickListener(mapClickListener);
+		cameraChangeListener=new MyCameraChangeListener(this);
+		_googleMap.setOnCameraChangeListener(cameraChangeListener);
+
 	}
 
 	public void initMapIfNeeded() {
