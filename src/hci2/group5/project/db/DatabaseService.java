@@ -1,6 +1,7 @@
 package hci2.group5.project.db;
 
 import hci2.group5.project.dao.Building;
+import hci2.group5.project.dao.BuildingDao;
 import hci2.group5.project.dao.DaoMaster;
 import hci2.group5.project.dao.DaoSession;
 import hci2.group5.project.dao.Department;
@@ -10,6 +11,7 @@ import hci2.group5.project.dao.Library;
 import java.util.List;
 
 import android.content.Context;
+import de.greenrobot.dao.query.Query;
 
 public class DatabaseService {
 
@@ -38,5 +40,13 @@ public class DatabaseService {
 
 	public static List<Building> getAllBuildings(DaoSession daoSession) {
 		return daoSession.getBuildingDao().queryBuilder().list();
+	}
+
+	public static String getBuildingSupplementInfo(DaoSession daoSession, String buildingName) {
+		BuildingDao buildingDao = daoSession.getBuildingDao();
+		Query<Building> query = buildingDao.queryBuilder().where(BuildingDao.Properties.Name.eq(buildingName)).build();
+		Building building = query.list().get(0);
+
+		return building.getSupplementaryInfo();
 	}
 }

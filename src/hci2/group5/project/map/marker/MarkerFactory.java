@@ -10,6 +10,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerFactory {
 
+	public static final String BUILDING_MARKER_CLICK_FOR_MORE = "(click for more)";
+
 	public static MarkerOptions getDepartmentMarker(Department department) {
 		return new MarkerOptions().position(department.getLocation().toLatLng())
 								  .title(department.getName())
@@ -50,18 +52,16 @@ public class MarkerFactory {
 
 	private static void setSnippetIfNeeded(Building building, MarkerOptions buildingMarkerOptions) {
 
-		final String clickForMore = "(click for more) TODO";
-
 		String snippet;
 
 		if (building.hasBuiltInfo() && building.hasSupplementaryInfo()) {
-			snippet = building.getBuiltInfo() + " " + clickForMore;
+			snippet = building.getBuiltInfo() + " " + BUILDING_MARKER_CLICK_FOR_MORE;
 		}
 		else if (building.hasBuiltInfo()) { // only has built info
 			snippet = building.getBuiltInfo();
 		}
 		else if (building.hasSupplementaryInfo()) { // only has supplementary info
-			snippet = clickForMore;
+			snippet = BUILDING_MARKER_CLICK_FOR_MORE;
 		}
 		else { // has neither built info nor supplementary info
 			snippet = "";

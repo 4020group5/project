@@ -9,6 +9,7 @@ import hci2.group5.project.dao.Library;
 import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.marker.MarkerFactory;
 import hci2.group5.project.map.marker.MyMarkClickListener;
+import hci2.group5.project.map.marker.MyOnInfoWindowClickListener;
 import hci2.group5.project.util.MapViewUtil;
 
 import java.util.ArrayList;
@@ -59,6 +60,9 @@ public class GoogleMapManager {
 		_googleMap.setOnCameraChangeListener(cameraChangeListener);
 		myLocationChangeListener = new MyLocationChangeListener(_googleMap);
 		_googleMap.setOnMyLocationChangeListener(myLocationChangeListener);
+
+		MyOnInfoWindowClickListener onInfoWindowClickListener = new MyOnInfoWindowClickListener(_mapFragment.getActivity());
+		_googleMap.setOnInfoWindowClickListener(onInfoWindowClickListener);
 	}
 
 	public void initMapIfNeeded() {
