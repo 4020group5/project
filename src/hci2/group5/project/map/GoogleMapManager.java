@@ -7,23 +7,26 @@ import hci2.group5.project.dao.Department;
 import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 import hci2.group5.project.db.DatabaseService;
-import hci2.group5.project.map.marker.MarkerFactory;
-import hci2.group5.project.map.marker.MyMarkClickListener;
+import hci2.group5.project.map.marker.MarkerManager;
 import hci2.group5.project.map.marker.MyOnInfoWindowClickListener;
 import hci2.group5.project.util.MapViewUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 public class GoogleMapManager {
@@ -33,36 +36,15 @@ public class GoogleMapManager {
 	 */
 	private static final float DECENT_ZOOM_LEVEL = 17f;
 
-	public GoogleMap _googleMap;
+	private GoogleMap _googleMap;
 	private MapFragment _mapFragment;
 
 	private UiManager _uiManager;
 	private MarkerManager _markerManager;
-	private MyMarkClickListener markerClickListener;
-	private MyMapClickListener mapClickListener;
-	private MyCameraChangeListener cameraChangeListener;
-	private MyLocationChangeListener myLocationChangeListener;
-
-	public float currentZoom;
 
 	public GoogleMapManager(MapFragment mapFragment) {
 		_mapFragment = mapFragment;
 		initMapIfNeeded();
-		initListener();
-	}
-
-	public void initListener() {
-		markerClickListener=new MyMarkClickListener(this);
-		_googleMap.setOnMarkerClickListener(markerClickListener);
-		mapClickListener=new MyMapClickListener(this);
-		_googleMap.setOnMapClickListener(mapClickListener);
-		cameraChangeListener=new MyCameraChangeListener(this);
-		_googleMap.setOnCameraChangeListener(cameraChangeListener);
-		myLocationChangeListener = new MyLocationChangeListener(_googleMap);
-		_googleMap.setOnMyLocationChangeListener(myLocationChangeListener);
-
-		MyOnInfoWindowClickListener onInfoWindowClickListener = new MyOnInfoWindowClickListener(_mapFragment.getActivity());
-		_googleMap.setOnInfoWindowClickListener(onInfoWindowClickListener);
 	}
 
 	public void initMapIfNeeded() {
@@ -89,7 +71,46 @@ public class GoogleMapManager {
 
 			setUpMyLocationButton();
 	        addBuildingMarkers();
+	        setListeners();
 		}
+	}
+
+	private void setListeners() {
+		_googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				if (_googleMap.getCameraPosition().zoom < DECENT_ZOOM_LEVEL) {
+					latLngZoom(marker.getPosition(), DECENT_ZOOM_LEVEL);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		});
+
+		_googleMap.setOnMapClickListener(new OnMapClickListener() {
+			@Override
+			public void onMapClick(LatLng position) {
+				if (_googleMap.getCameraPosition().zoom < DECENT_ZOOM_LEVEL) {
+					latLngZoom(position, DECENT_ZOOM_LEVEL);
+				}
+			}
+		});
+
+		_googleMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
+			@Override
+			public void onMyLocationChange(Location location) {
+				LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+				latLngZoom(position, DECENT_ZOOM_LEVEL);
+			}
+		});
+
+		_googleMap.setOnInfoWindowClickListener(new MyOnInfoWindowClickListener(_mapFragment.getActivity()));
+	}
+
+	private void latLngZoom(LatLng latLng, float zoom) {
+		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 	}
 
 	public void addBuildingMarkers() {
@@ -108,14 +129,14 @@ public class GoogleMapManager {
 		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addDepartmentMarker(department);
 		_markerManager.showLastAddedMarkerInfowindow();
-		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(department.getLocation().toLatLng(), DECENT_ZOOM_LEVEL));
+		latLngZoom(department.getLocation().toLatLng(), DECENT_ZOOM_LEVEL);
 	}
 
 	public void addLibraryMarker(Library library) {
 		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addLibraryMarker(library);
 		_markerManager.showLastAddedMarkerInfowindow();
-		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(library.getLocation().toLatLng(), DECENT_ZOOM_LEVEL));
+		latLngZoom(library.getLocation().toLatLng(), DECENT_ZOOM_LEVEL);
 	}
 
 	public void addFoodServiceMarkers(List<FoodService> foodServices) {
@@ -132,61 +153,5 @@ class UiManager {
 		googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 		// move the button to bottom left
 		MapViewUtil.putMyLocationButtonBottomLeft(mapFragment);
-	}
-}
-
-class MarkerManager {
-
-	private GoogleMap _googleMap;
-
-	private List<Marker> _lastAddedMarkers;
-
-	public MarkerManager(GoogleMap googleMap) {
-		_googleMap = googleMap;
-		_lastAddedMarkers = new ArrayList<Marker>();
-	}
-
-	public void addBuildingMarkers(List<Building> buildings, BitmapDescriptor icon) {
-		for (Building building : buildings) {
-			_googleMap.addMarker(MarkerFactory.getBuildingMarker(building, icon));
-		}
-	}
-
-	public void addFoodServiceMarkers(List<FoodService> foodServices) {
-		for (FoodService foodService : foodServices) {
-			Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getFoodServiceMarker(foodService));
-			_markerAdded(anotherMarker);
-		}
-
-	}
-
-	public void addLibraryMarker(Library library) {
-		Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getLibraryMarker(library));
-		_markerAdded(anotherMarker);
-	}
-
-	private void _markerAdded(Marker marker) {
-		_lastAddedMarkers.add(marker);
-	}
-
-	public void removeAllMarkersIfNeeded() {
-		if ( ! _lastAddedMarkers.isEmpty()) {
-			for (Marker marker : _lastAddedMarkers) {
-				marker.remove();
-			}
-			_lastAddedMarkers.clear();
-		}
-	}
-
-	public void addDepartmentMarker(Department department) {
-		Marker anotherMarker = _googleMap.addMarker(MarkerFactory.getDepartmentMarker(department));
-		_markerAdded(anotherMarker);
-	}
-
-	public void showLastAddedMarkerInfowindow() {
-		if ( ! _lastAddedMarkers.isEmpty()) {
-			Marker lastAddedMarker = _lastAddedMarkers.get(_lastAddedMarkers.size() - 1);
-			lastAddedMarker.showInfoWindow();
-		}
 	}
 }
