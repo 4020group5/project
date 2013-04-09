@@ -35,13 +35,13 @@ public class MainActivity extends Activity {
 
 	private void initializeNavAndSearchButtonsAndPanes() {
 		View buttons = findViewById(R.id.navAndSearchButtons);
-        ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
+//        ImageButton navButton = (ImageButton) findViewById(R.id.navButton);
         searchButton = (ImageButton) findViewById(R.id.searchButton);
 
         View navPane = findViewById(R.id.navPane);
         View searchPane = findViewById(R.id.searchPane);
 
-        navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
+//        navButton.setOnClickListener(SideButtonClickListenerFactory.getNavOne(navPane, buttons));
         searchButton.setOnClickListener(SideButtonClickListenerFactory.getSearchOne(searchPane, buttons));
 	}
 
