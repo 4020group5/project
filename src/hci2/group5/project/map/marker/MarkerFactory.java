@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerFactory {
 
-	public static final String BUILDING_MARKER_CLICK_FOR_MORE = "Click for supplementary information";
+	public static final String BUILDING_MARKER_CLICK_FOR_MORE = "(Click for supplementary information)";
 
 	public static MarkerOptions getDepartmentMarker(Department department) {
 		return new MarkerOptions().position(department.getLocation().toLatLng())
@@ -70,7 +70,7 @@ public class MarkerFactory {
 
 			departmentsBuilder.append("Departments:\n");
 			for (Department d : building.getDepartments()) {
-				departmentsBuilder.append("　");
+				departmentsBuilder.append("　- ");
 				departmentsBuilder.append(d.getName());
 				departmentsBuilder.append('\n');
 			}
@@ -83,6 +83,11 @@ public class MarkerFactory {
 				snippetBuilder.append('\n');
 			}
 			snippetBuilder.append(BUILDING_MARKER_CLICK_FOR_MORE);
+		}
+		else { // no supplementary info
+			if (building.hasDepartments()) {
+				snippetBuilder.deleteCharAt(snippetBuilder.length() - 1); // remove last line end
+			}
 		}
 
 		// set snippet?
