@@ -70,7 +70,7 @@ public class MarkerFactory {
 
 			departmentsBuilder.append("Departments:\n");
 			for (Department d : building.getDepartments()) {
-				departmentsBuilder.append("　- ");
+				departmentsBuilder.append(" - ");
 				departmentsBuilder.append(d.getName());
 				departmentsBuilder.append('\n');
 			}
