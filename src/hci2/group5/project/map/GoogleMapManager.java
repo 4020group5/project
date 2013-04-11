@@ -85,7 +85,7 @@ public class GoogleMapManager {
 			@Override
 			public void onMyLocationChange(Location location) {
 				LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-				animateToBuildingZoomLevelIfNeeded(position);
+				animateToBuildingZoomLevel(position);
 			}
 		});
 
@@ -100,12 +100,16 @@ public class GoogleMapManager {
 	 */
 	public boolean animateToBuildingZoomLevelIfNeeded(LatLng latLng) {
 		if (_googleMap.getCameraPosition().zoom < GoogleMapManager.BUILDING_ZOOM_LEVEL) {
-			_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, BUILDING_ZOOM_LEVEL));
+			animateToBuildingZoomLevel(latLng);
 			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+	public void animateToBuildingZoomLevel(LatLng latLng) {
+		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, BUILDING_ZOOM_LEVEL));
 	}
 
 	public void addBuildingMarkers() {
@@ -124,15 +128,14 @@ public class GoogleMapManager {
 		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addDepartmentMarker(department);
 		_markerManager.showLastAddedMarkerInfowindow();
-		animateToBuildingZoomLevelIfNeeded(department.getLocation().toLatLng());
-
+		animateToBuildingZoomLevel(department.getLocation().toLatLng());
 	}
 
 	public void addLibraryMarker(Library library) {
 		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addLibraryMarker(library);
 		_markerManager.showLastAddedMarkerInfowindow();
-		animateToBuildingZoomLevelIfNeeded(library.getLocation().toLatLng());
+		animateToBuildingZoomLevel(library.getLocation().toLatLng());
 	}
 
 	public void addFoodServiceMarkers(List<FoodService> foodServices) {
