@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -142,6 +145,39 @@ public class SearchPaneSetUp {
 				}
 
 				return isHandled;
+			}
+		});
+
+		// set up the clear button
+		final ImageButton clearAutoCompleteDepartmentsButton = (ImageButton) _activity.findViewById(R.id.clearAutoCompleteDepartments);
+		clearAutoCompleteDepartmentsButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				autoCompleteDepartments.setText("");
+				ImeUtils.showSoftInput(_activity, autoCompleteDepartments);
+			}
+		});
+
+		autoCompleteDepartments.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+				if (s.length() == 0) {
+					clearAutoCompleteDepartmentsButton.setVisibility(View.GONE);
+				}
+				else {
+					clearAutoCompleteDepartmentsButton.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 	}
