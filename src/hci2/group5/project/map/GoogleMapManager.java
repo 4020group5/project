@@ -8,7 +8,6 @@ import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
 import hci2.group5.project.db.DatabaseService;
 import hci2.group5.project.map.marker.MarkerManager;
-import hci2.group5.project.map.marker.MyOnInfoWindowClickListener;
 import hci2.group5.project.util.MapViewUtil;
 
 import java.util.List;
@@ -20,21 +19,19 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 public class GoogleMapManager {
 
 	/**
-	 * A zoom level that building shape and building name are shown.
+	 * 17, a zoom level that building shape and building name are shown.
 	 */
-	private static final float DECENT_ZOOM_LEVEL = 17f;
+	private static final float BUILDING_ZOOM_LEVEL = 17f;
 
 	private GoogleMap _googleMap;
 	private MapFragment _mapFragment;
@@ -76,25 +73,11 @@ public class GoogleMapManager {
 	}
 
 	private void setListeners() {
-		_googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				if (_googleMap.getCameraPosition().zoom < DECENT_ZOOM_LEVEL) {
-					latLngZoom(marker.getPosition(), DECENT_ZOOM_LEVEL);
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-		});
 
 		_googleMap.setOnMapClickListener(new OnMapClickListener() {
 			@Override
 			public void onMapClick(LatLng position) {
-				if (_googleMap.getCameraPosition().zoom < DECENT_ZOOM_LEVEL) {
-					latLngZoom(position, DECENT_ZOOM_LEVEL);
-				}
+				animateToBuildingZoomLevelIfNeeded(position);
 			}
 		});
 
@@ -102,15 +85,27 @@ public class GoogleMapManager {
 			@Override
 			public void onMyLocationChange(Location location) {
 				LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-				latLngZoom(position, DECENT_ZOOM_LEVEL);
+				animateToBuildingZoomLevelIfNeeded(position);
 			}
 		});
 
-		_googleMap.setOnInfoWindowClickListener(new MyOnInfoWindowClickListener(_mapFragment.getActivity()));
+		_markerManager.setMarkerRelatedListeners(_mapFragment.getActivity(), this);
 	}
 
-	private void latLngZoom(LatLng latLng, float zoom) {
-		_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+	/**
+	 * Animated camera if current zoom level < <code>BUILDING_ZOOM_LEVEL</code>
+	 *
+	 * @return true if camera is animated; false otherwise.
+	 * @see #BUILDING_ZOOM_LEVEL
+	 */
+	public boolean animateToBuildingZoomLevelIfNeeded(LatLng latLng) {
+		if (_googleMap.getCameraPosition().zoom < GoogleMapManager.BUILDING_ZOOM_LEVEL) {
+			_googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, BUILDING_ZOOM_LEVEL));
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public void addBuildingMarkers() {
@@ -129,14 +124,15 @@ public class GoogleMapManager {
 		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addDepartmentMarker(department);
 		_markerManager.showLastAddedMarkerInfowindow();
-		latLngZoom(department.getLocation().toLatLng(), DECENT_ZOOM_LEVEL);
+		animateToBuildingZoomLevelIfNeeded(department.getLocation().toLatLng());
+
 	}
 
 	public void addLibraryMarker(Library library) {
 		_markerManager.removeAllMarkersIfNeeded();
 		_markerManager.addLibraryMarker(library);
 		_markerManager.showLastAddedMarkerInfowindow();
-		latLngZoom(library.getLocation().toLatLng(), DECENT_ZOOM_LEVEL);
+		animateToBuildingZoomLevelIfNeeded(library.getLocation().toLatLng());
 	}
 
 	public void addFoodServiceMarkers(List<FoodService> foodServices) {

@@ -218,6 +218,10 @@ public class Building {
     public boolean hasSupplementaryInfo() {
 		return ! getSupplementaryInfo().isEmpty();
 	}
+
+    public boolean hasDepartments() {
+		return ! getDepartments().isEmpty();
+	}
     // KEEP METHODS END
 
 }

@@ -4,11 +4,15 @@ import hci2.group5.project.dao.Building;
 import hci2.group5.project.dao.Department;
 import hci2.group5.project.dao.FoodService;
 import hci2.group5.project.dao.Library;
+import hci2.group5.project.map.GoogleMapManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.Marker;
 
@@ -21,6 +25,20 @@ public class MarkerManager {
 	public MarkerManager(GoogleMap googleMap) {
 		_googleMap = googleMap;
 		_lastAddedMarkers = new ArrayList<Marker>();
+	}
+
+	public void setMarkerRelatedListeners(Activity activity, final GoogleMapManager mapManager) {
+
+		_googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				return mapManager.animateToBuildingZoomLevelIfNeeded(marker.getPosition());
+			}
+		});
+
+		_googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter(activity.getLayoutInflater()));
+
+		_googleMap.setOnInfoWindowClickListener(new MyOnInfoWindowClickListener(activity));
 	}
 
 	public void addBuildingMarkers(List<Building> buildings, BitmapDescriptor icon) {
