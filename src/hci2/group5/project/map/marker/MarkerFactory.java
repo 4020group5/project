@@ -40,7 +40,9 @@ public class MarkerFactory {
 	}
 
 	public static MarkerOptions getBuildingMarker(Building building, BitmapDescriptor icon) {
-		MarkerOptions buildingMarkerOptions = new MarkerOptions().icon(icon)
+		MarkerOptions buildingMarkerOptions = new MarkerOptions()
+				.icon(icon)
+				.anchor(0.5f, 0.5f) // so the icon is drawn right around the location
 				.position(building.getLocation().toLatLng())
 				.title(building.getName());
 
