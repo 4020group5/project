@@ -136,6 +136,7 @@ public class SearchPaneSetUp {
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				boolean isHandled = false;
 				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					ImeUtils.hideSoftInput(_activity);
 					autoCompleteDepartments.showDropDown();
 					isHandled = true;
 				}
